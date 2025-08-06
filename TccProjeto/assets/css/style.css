@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* Remove setas do input number para Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+.left-side {
+    display: flex;
+    flex-direction: column;
+
+
+    margin: 0 0 0 2rem;
+    width: 20%;
+    height: 98%;
+    background-color: #003042;
+    border-radius: 10px;
+} 
