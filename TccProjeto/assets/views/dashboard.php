@@ -1,3 +1,8 @@
+<?php
+require_once '../scripts/connection.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-Br">
 <head>
@@ -35,21 +40,44 @@
                     <input placeholder="Pesquisa" type="text" class="w-[13rem] h-[2rem] text-lg bg-white border rounded-2xl pl-2 text-black border-black">
                 </header>
                 
-                <div class="w-full h-[83%] flex items-center pt-5.5 gap-4.5 flex-col overflow-auto">
-                    
-                    <div id="open-edit-modal-button" class="w-[60%] h-40 flex flex-row hover:cursor-pointer bg-white rounded-2xl">
-                        <div class="w-[30%] h-full flex justify-center items-center">
-                            <img src="../imgs/test-img.jpg" class="size-3/4 rounded-2xl" alt="">
+                <div class="w-full h-[83%] flex items-center pt-5.5 gap-4.5 flex-col overflow-auto"
+                >
+                    <?php
+                    $stmt = $conexao->prepare("SELECT * FROM vw_cliente_encomenda");
+                    $stmt->execute();
+                    $resultado = $stmt->get_result();
+
+                    while ($row = $resultado->fetch_assoc()) {
+                        ?>
+                        
+                        <div class="open-edit-modal-button w-[60%] h-40 flex flex-row hover:cursor-pointer bg-white rounded-2xl"
+                        data-encomenda="<?php echo $row['nm_encomenda']; ?>"
+                        data-cliente="<?php echo $row['nm_cliente']; ?>"
+                        data-rua="<?php echo $row['ds_rua']; ?>"
+                        data-cidade="<?php echo $row['nm_cidade']; ?>"
+                        data-bairro="<?php echo $row['nm_bairro']; ?>"
+                        data-descricao="<?php echo $row['ds_encomenda']; ?>"
+                        data-cep="<?php echo $row['nr_cep']; ?>"
+                        data-casa="<?php echo $row['nr_casa']; ?>"
+                        data-complemento="<?php echo $row['ds_complemento']; ?>"
+                        data-descricao="<?php echo $row['ds_encomenda']; ?>"
+                        data-peso="<?php echo $row['qt_peso_encomenda']; ?>"
+                        data-status="<?php echo $row['nm_status_encomenda']; ?>">
+                            <div class="w-[30%] h-full flex justify-center items-center">
+                                <img src="../imgs/test-img.jpg" class="size-3/4 rounded-2xl" alt="">
+                            </div>
+                            <div class="w-[50%] h-full flex flex-col items-center justify-center">
+                                <h1 class="text-2xl text-center"><?php echo $row['nm_encomenda']; ?></h1>
+                                <p class="text-lg text-center"><?php echo $row['ds_encomenda']; ?></p>
+                                <p class="text-lg text-center">Peso: <?php echo $row['qt_peso_encomenda']; ?>Kg</p>
+                            </div>
+                            <div class="w-[20%] h-full flex flex-col items-center pt-5">
+                                <label for="status" class="border text-center text-xl rounded-2xl w-28 bg-[#bf6e33] text-white h-8"><?php echo $row['nm_status_encomenda']; ?></label>
+                            </div>
                         </div>
-                        <div class="w-[50%] h-full flex flex-col items-center justify-center">
-                            <h1 class="text-2xl text-center">Nome da Encomenda</h1>
-                            <p class="text-lg text-center">Descrição da Encomenda</p>
-                            <p class="text-lg text-center">Peso: 100,00Kg</p>
-                        </div>
-                        <div class="w-[20%] h-full flex flex-col items-center pt-5">
-                            <label for="status" class="border text-center text-xl rounded-2xl w-28 bg-[#bf6e33] text-white h-8">Status?</label>
-                        </div>
-                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
                 
                 <footer class="w-full flex flex-1 justify-end pr-30 bg-[#003042]">
@@ -85,7 +113,7 @@
                             </div>
                             <div class="flex flex-col  w-full space-x-4 gap-3">
                                 <label for="descricao" class="bg-[#202737] w-25 text-white px-4 py-2 rounded-full font-semibold">Descrição</label>
-                                <textarea id="description-" name="description" placeholder="Descrição da Encomenda" id="" class=" bg-[#bf6e33] text-white w-full h-50 rounded-2xl pl-2 "></textarea>
+                                <textarea id="description-encomenda" name="description" placeholder="Descrição da Encomenda" class=" bg-[#bf6e33] text-white w-full h-50 rounded-2xl pl-2 "></textarea>
                             </div>
                             <button type="submit" class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded self-end">
                                 Salvar Alterações
@@ -146,14 +174,30 @@ showTab('encomenda');
 
 // ======================= LÓGICA DO MODAL DE EDIÇÃO =======================
 const editModal = document.getElementById('edit-modal');
-const openEditModalBtn = document.getElementById('open-edit-modal-button');
+const openEditModalBtn = document.querySelectorAll('.open-edit-modal-button');
 const closeEditModalBtn = document.querySelector('.close-button-edit');
 
 function toggleEditModal() {
     editModal.classList.toggle('hidden');
 }
+openEditModalBtn.forEach(btn => {
+    btn.addEventListener('click', function() {
+        toggleEditModal();
+        document.getElementById('encomenda-nome').value = btn.getAttribute('data-encomenda');
+        document.getElementById('cliente-nome').value = btn.getAttribute('data-cliente');
+        document.getElementById('cliente-street-name').value = btn.getAttribute('data-rua');
+        document.getElementById('cliente-street-number').value = btn.getAttribute('data-casa');
+        document.getElementById('street-complement').value = btn.getAttribute('data-complemento');
+        document.getElementById('cliente-neighborhood').value = btn.getAttribute('data-bairro');
+        document.getElementById('description-encomenda').value = btn.getAttribute('data-descricao');
+        document.getElementById('city').value = btn.getAttribute('data-cidade');
+        document.getElementById('cep').value = btn.getAttribute('data-cep');
+        document.getElementById('status-').value = btn.getAttribute('data-status');
+        // Adicione outros campos conforme necessário
 
-openEditModalBtn.addEventListener('click', toggleEditModal);
+    });
+});
+
 closeEditModalBtn.addEventListener('click', toggleEditModal);
 
 // ======================= LÓGICA DO MODAL DE ADIÇÃO =======================

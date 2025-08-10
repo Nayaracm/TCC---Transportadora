@@ -1,33 +1,30 @@
 <?php
-session_start();
-$host = "localhost";
-$usuario = "root";
-$bdsenha = "Q3A3Q7A1Q4A3Q9";
-$database = "bd_gerenciamento_tcc";
-$port = "3306";
+require_once '../scripts/connection.php';
 
-if(isset($_GET['cnpj']) && isset($_GET['senha'])) {
-    $cnpj = $_GET['cnpj'];
-    $senha_usuario = $_GET['senha'];
+if(isset($_POST['cnpj']) && isset($_POST['senha'])) {
+    $cnpj = $_POST['cnpj'];
+    $senha_usuario = $_POST['senha'];
 
-    $conexao = new mysqli($host, $usuario, $bdsenha, $database, $port);
+    if($cnpj !== "" && $senha_usuario !== "") {
+        $stmt = $conexao->prepare("SELECT * FROM tb_login WHERE id_login = ? AND cd_senha = ?");
+        $stmt->bind_param("ss", $cnpj, $senha_usuario);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
 
-    if ($conexao->connect_error) {
-        die("Erro ao conectar ao banco de dados: " . $conexao->connect_error);
+        if ($resultado->num_rows > 0) {
+            $_SESSION['usuario'] = $resultado->fetch_assoc();
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            echo "<script>alert('CNPJ ou senha inválidos.');</script>";
+        }
+        
+        $stmt->close();
+        $conexao->close();
     }
-
-    $query = "SELECT * FROM tb_login WHERE id_login = '$cnpj' AND cd_senha = '$senha_usuario'";
-    $resultado = $conexao->query($query);
-
-    if ($resultado->num_rows > 0) {
-        $_SESSION['usuario'] = $resultado->fetch_assoc();
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        echo "<script>alert('CNPJ ou senha inválidos.');</script>";
+    else {
+        echo "<script>alert('Por favor, preencha todos os campos.');</script>";
     }
-
-    mysqli_close($conexao);
 }
 ?>
 <!DOCTYPE html>
@@ -46,7 +43,7 @@ if(isset($_GET['cnpj']) && isset($_GET['senha'])) {
                 <div class="w-20 h-8 bg-white rounded-b-full mt-2"></div>
             </div>
         </div>
-        <form class="flex flex-col items-center justify-center gap-2 " action="" method="get">
+        <form class="flex flex-col items-center justify-center gap-2 " action="" method="POST">
             <input
                 placeholder="CNPJ"
                 name="cnpj"
