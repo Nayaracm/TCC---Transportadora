@@ -52,6 +52,7 @@ require_once '../scripts/connection.php';
                         
                         <div class="open-edit-modal-button w-[60%] h-40 flex flex-row hover:cursor-pointer bg-white rounded-2xl"
                         data-encomenda="<?php echo $row['nm_encomenda']; ?>"
+                        data-id="<?php echo $row['id_encomenda']; ?>"
                         data-cliente="<?php echo $row['nm_cliente']; ?>"
                         data-rua="<?php echo $row['ds_rua']; ?>"
                         data-cidade="<?php echo $row['nm_cidade']; ?>"
@@ -94,6 +95,8 @@ require_once '../scripts/connection.php';
                             <img src="https://via.placeholder.com/150/bf6e33/FFFFFF?text=Caixas" alt="Ícone de Encomenda" class="w-full h-auto">
                         </div>
                         <div class="w-3/4 flex flex-col space-y-4">
+                            <label id="id_encomenda" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold"></label>
+                            <input type="hidden" id="id_encomenda_input" name="id_encomenda">
                             <div class="flex items-center space-x-4">
                                 <label for="encomenda-nome" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Nome</label>
                                 <input type="text" id="encomenda-nome" name="nome" value="Encomenda 2" class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
@@ -115,10 +118,10 @@ require_once '../scripts/connection.php';
                                 <label for="descricao" class="bg-[#202737] w-25 text-white px-4 py-2 rounded-full font-semibold">Descrição</label>
                                 <textarea id="description-encomenda" name="description" placeholder="Descrição da Encomenda" class=" bg-[#bf6e33] text-white w-full h-50 rounded-2xl pl-2 "></textarea>
                             </div>
-                            <button type="submit" class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded self-end">
+                            <button type="submit" id="salvar" class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded self-end">
                                 Salvar Alterações
                             </button>
-                            <button type="submit" class="bg-[#003042] hover:bg-[#bf6e33] fixed bottom-[12.93rem] right-224 text-white font-bold py-2 px-4 rounded self-end">
+                            <button type="submit" id="excluir" class="bg-[#003042] hover:bg-[#bf6e33] fixed bottom-[12.93rem] right-224 text-white font-bold py-2 px-4 rounded self-end">
                                 Excluir Encomenda
                             </button>
                         </div>
@@ -191,8 +194,9 @@ openEditModalBtn.forEach(btn => {
         document.getElementById('cliente-neighborhood').value = btn.getAttribute('data-bairro');
         document.getElementById('description-encomenda').value = btn.getAttribute('data-descricao');
         document.getElementById('city').value = btn.getAttribute('data-cidade');
+        document.getElementById('id_encomenda').textContent = 'Codigo de Encomenda: ' + btn.getAttribute('data-id');
+        document.getElementById('id_encomenda_input').value = btn.getAttribute('data-id');
         document.getElementById('cep').value = btn.getAttribute('data-cep');
-        document.getElementById('status-').value = btn.getAttribute('data-status');
         // Adicione outros campos conforme necessário
 
     });
@@ -220,6 +224,78 @@ window.addEventListener('click', (event) => {
     if (event.target === addModal) {
         toggleAddModal();
     }
+});
+
+// ======================= LÓGICA PARA BOTÃO DELETE MANDAR O EDIT_MODAL AGIR =======================
+document.getElementById('salvar').addEventListener('click', function(event) {
+    event.preventDefault(); // impede envio do formulário
+
+    const id_encomenda = document.getElementById('id_encomenda_input').value;
+    const nome = document.getElementById('encomenda-nome').value;
+    const cliente = document.getElementById('cliente-nome').value;
+    const rua = document.getElementById('cliente-street-name').value;
+    const cidade = document.getElementById('city').value;
+    const bairro = document.getElementById('cliente-neighborhood').value;
+    const descricao = document.getElementById('description-encomenda').value;
+    const cep = document.getElementById('cep').value;
+    const casa = document.getElementById('cliente-street-number').value;
+    const complemento = document.getElementById('street-complement').value;
+    const status = document.getElementById('status').value;
+
+    if (!confirm("Tem certeza que deseja salvar essas alterações?")) {
+        return;
+    }
+
+    fetch('../scripts/edit_modal.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'acao=salvar&id_encomenda=' + encodeURIComponent(id_encomenda) + 
+        '&nome=' + encodeURIComponent(nome) + 
+        '&cliente=' + encodeURIComponent(cliente) + 
+        '&rua=' + encodeURIComponent(rua) + 
+        '&cidade=' + encodeURIComponent(cidade) + 
+        '&bairro=' + encodeURIComponent(bairro) + 
+        '&descricao=' + encodeURIComponent(descricao) + 
+        '&cep=' + encodeURIComponent(cep) + 
+        '&casa=' + encodeURIComponent(casa) + 
+        '&complemento=' + encodeURIComponent(complemento) + 
+        '&status=' + encodeURIComponent(status)
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        location.reload();
+    })
+    .catch(error => {
+        console.error("Erro:", error);
+        alert("Erro ao salvar encomenda.");
+    });
+});
+
+// ======================= LÓGICA PARA BOTÃO DELETE MANDAR O EDIT_MODAL AGIR =======================
+document.getElementById('excluir').addEventListener('click', function(event) {
+    event.preventDefault(); // impede envio do formulário
+
+    const id_encomenda = document.getElementById('id_encomenda_input').value;
+
+    if (!confirm("Tem certeza que deseja excluir esta encomenda?")) {
+        return;
+    }
+
+    fetch('../scripts/edit_modal.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'acao=excluir&id_encomenda=' + encodeURIComponent(id_encomenda)
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        location.reload();
+    })
+    .catch(error => {
+        console.error("Erro:", error);
+        alert("Erro ao excluir encomenda.");
+    });
 });
 </script>
 </html>
