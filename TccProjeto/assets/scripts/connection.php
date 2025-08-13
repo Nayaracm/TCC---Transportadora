@@ -1,12 +1,17 @@
 <?php
+
 $host = "localhost";
 $usuario = "root";
-$bdsenha = "Q3A3Q7A1Q4A3Q9";
+$bdsenha = "root";
 $database = "bd_gerenciamento_tcc";
-$port = "3306";
+$port = "3307";
 
-$conexao = new mysqli($host, $usuario, $bdsenha, $database, $port);
-
-if ($conexao->connect_error) {
-    die("Erro de conexão: " . $conexao->connect_error);
+try {
+	$dsn = "mysql:host=$host;port=$port;dbname=$database;charset=utf8";
+	$conexao = new PDO($dsn, $usuario, $bdsenha);
+	$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	// Conexão bem-sucedida
+} catch (PDOException $e) {
+	die("Erro na conexão: " . $e->getMessage());
 }
+

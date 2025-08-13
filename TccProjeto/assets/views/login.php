@@ -1,40 +1,37 @@
 <?php
 require_once '../scripts/connection.php';
 
-if(isset($_POST['cnpj']) && isset($_POST['senha'])) {
+if (isset($_POST['cnpj']) && isset($_POST['senha'])) {
     $cnpj = $_POST['cnpj'];
     $senha_usuario = $_POST['senha'];
 
-    if($cnpj !== "" && $senha_usuario !== "") {
+    if ($cnpj !== "" && $senha_usuario !== "") {
         $stmt = $conexao->prepare("SELECT * FROM tb_login WHERE id_login = ? AND cd_senha = ?");
-        $stmt->bind_param("ss", $cnpj, $senha_usuario);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+        $stmt->execute([$cnpj, $senha_usuario]);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($resultado->num_rows > 0) {
-            $_SESSION['usuario'] = $resultado->fetch_assoc();
+        if ($resultado) {
+            $_SESSION['usuario'] = $resultado;
             header("Location: dashboard.php");
             exit();
         } else {
             echo "<script>alert('CNPJ ou senha inválidos.');</script>";
         }
-        
-        $stmt->close();
-        $conexao->close();
-    }
-    else {
+    } else {
         echo "<script>alert('Por favor, preencha todos os campos.');</script>";
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/output.css">
     <title>Login</title>
 </head>
+
 <body class="min-h-screen h-screen flex items-center justify-center bg-[#003042]">
     <div class="size-130 flex flex-col  items-center justify-center bg-[#C27534] rounded-xl shadow-xl shadow-black">
         <div class="flex items-center justify-center mb-10">
@@ -44,27 +41,26 @@ if(isset($_POST['cnpj']) && isset($_POST['senha'])) {
             </div>
         </div>
         <form class="flex flex-col items-center justify-center gap-2 " action="" method="POST">
-            <input
-                placeholder="CNPJ"
-                name="cnpj"
+            <input placeholder="CNPJ" name="cnpj"
                 class="border w-70 h-8.5 bg-[#353535] placeholder-white text-white border-black appearance-none rounded-lg pl-2"
-                type="text"
-                maxlength="18"
-                oninput="this.value = formatCNPJ(this.value)"
-            />
-            <input placeholder="Senha" name="senha" class="border w-70 h-8.5 bg-[#353535] placeholder-white text-white border-black rounded-lg pl-2" type="password">
-            <button class=" rounded-md w-45 h-10 bg-white mt-10 hover:bg-gray-200 cursor-pointer" type="submit">Entrar</button>
+                type="text" maxlength="18" oninput="this.value = formatCNPJ(this.value)" />
+            <input placeholder="Senha" name="senha"
+                class="border w-70 h-8.5 bg-[#353535] placeholder-white text-white border-black rounded-lg pl-2"
+                type="password">
+            <button class=" rounded-md w-45 h-10 bg-white mt-10 hover:bg-gray-200 cursor-pointer"
+                type="submit">Entrar</button>
         </form>
     </div>
 </body>
 <script>
-function formatCNPJ(value) {
-    value = value.replace(/\D/g, '').slice(0, 14);
-    return value
-        .replace(/^(\d{2})(\d)/, '$1.$2')
-        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-        .replace(/\.(\d{3})(\d)/, '.$1/$2')
-        .replace(/(\d{4})(\d)/, '$1-$2');
-}
+    function formatCNPJ(value) {
+        value = value.replace(/\D/g, '').slice(0, 14);
+        return value
+            .replace(/^(\d{2})(\d)/, '$1.$2')
+            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1/$2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+    }
 </script>
+
 </html>
