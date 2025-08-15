@@ -2,69 +2,68 @@
 require_once 'connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (($_POST["acao"])  === "salvar") {
-        // Lógica para salvar as alterações
-        /*$id_encomenda = $_POST['id_encomenda'];
-        $nome = $_POST['nome'];
-        $cliente = $_POST['cliente'];
-        $rua = $_POST['rua'];
-        $cidade = $_POST['cidade'];
-        $bairro = $_POST['bairro'];
-        $descricao = $_POST['descricao'];
-        $cep = $_POST['cep'];
-        $casa = $_POST['casa'];
-        $complemento = $_POST['complemento'];
-        $status = $_POST['status'];
+    if (isset($_POST["acao"]) && $_POST["acao"] === "adicionar") {
+        // Cadastro de nova encomenda
+        $nm_encomenda = $_POST['nm_encomenda'] ?? '';
+        $ds_encomenda = $_POST['ds_encomenda'] ?? '';
+        $qt_peso_encomenda = $_POST['qt_peso_encomenda'] ?? '';
+        $nm_status_encomenda = $_POST['nm_status_encomenda'] ?? '';
+        $id_cliente = $_POST['id_cliente'] ?? '';
 
-        try {
-        // Atualiza encomenda
-        $sql_encomenda = "UPDATE tb_encomenda 
-                          SET nm_encomenda = ?, ds_encomenda = ?, qt_peso_encomenda = ?, nm_status_encomenda = ? 
-                          WHERE id_encomenda = ?";
-        $stmt = $conn->prepare($sql_encomenda);
-        $stmt->bind_param("ssisi", $nome, $descricao, $peso, $status, $id_encomenda);
-        $stmt->execute();
-        $stmt->close();
+        if ($nm_encomenda && $qt_peso_encomenda && $nm_status_encomenda && $id_cliente) {
+            $sql = "INSERT INTO tb_encomenda (nm_encomenda, ds_encomenda, qt_peso_encomenda, nm_status_encomenda, id_cliente) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conexao->prepare($sql);
+            if ($stmt->execute([$nm_encomenda, $ds_encomenda, $qt_peso_encomenda, $nm_status_encomenda, $id_cliente])) {
+                echo "Encomenda cadastrada com sucesso!";
+            } else {
+                $erro = $stmt->errorInfo();
+                echo "Erro ao cadastrar encomenda: " . $erro[2];
+            }
+            $stmt = null;
+        } else {
+            echo "Preencha todos os campos obrigatórios.";
+        }
+        exit;
+    }
 
-        // Atualiza cliente
-        $sql_cliente = "UPDATE tb_cliente 
-                        SET nm_cliente = ? 
-                        WHERE id_cliente = ?";
-        $stmt = $conn->prepare($sql_cliente);
-        $stmt->bind_param("si", $cliente, $id_cliente);
-        $stmt->execute();
-        $stmt->close();
+    if (isset($_POST["acao"]) && $_POST["acao"] === "salvar") {
+        // Lógica para editar encomenda
+        $id_encomenda = $_POST['id_encomenda'] ?? '';
+        $nm_encomenda = $_POST['nm_encomenda'] ?? '';
+        $ds_encomenda = $_POST['ds_encomenda'] ?? '';
+        $qt_peso_encomenda = $_POST['qt_peso_encomenda'] ?? '';
+        $nm_status_encomenda = $_POST['nm_status_encomenda'] ?? '';
+        $id_cliente = $_POST['id_cliente'] ?? '';
 
-        // Atualiza endereço
-        $sql_endereco = "UPDATE tb_endereco 
-                         SET rua = ?, cidade = ?, estado = ?, cep = ? 
-                         WHERE id_endereco = ?";
-        $stmt = $conn->prepare($sql_endereco);
-        $stmt->bind_param("ssssi", $rua, $cidade, $estado, $cep, $id_endereco);
-        $stmt->execute();
-        $stmt->close();
+        if ($id_encomenda && $nm_encomenda && $qt_peso_encomenda && $nm_status_encomenda && $id_cliente) {
+            $sql = "UPDATE tb_encomenda SET nm_encomenda = ?, ds_encomenda = ?, qt_peso_encomenda = ?, nm_status_encomenda = ?, id_cliente = ? WHERE id_encomenda = ?";
+            $stmt = $conexao->prepare($sql);
+            if ($stmt->execute([$nm_encomenda, $ds_encomenda, $qt_peso_encomenda, $nm_status_encomenda, $id_cliente, $id_encomenda])) {
+                echo "Encomenda alterada com sucesso!";
+            } else {
+                $erro = $stmt->errorInfo();
+                echo "Erro ao alterar encomenda: " . $erro[2];
+            }
+            $stmt = null;
+        } else {
+            echo "Preencha todos os campos obrigatórios.";
+        }
+        exit;
+    }
 
-        // Se tudo der certo
-        $conn->commit();
-        echo "Dados atualizados com sucesso!";
-        } catch (Exception $e) {
-            $conn->rollback();
-            echo "Erro ao atualizar dados: " . $e->getMessage();
-        }*/
-    } elseif (($_POST["acao"])  === "excluir") {
+    if (isset($_POST["acao"]) && $_POST["acao"] === "excluir") {
         // Lógica para excluir a encomenda
         $encomenda = $_POST['id_encomenda'];
         $sql = "DELETE FROM tb_encomenda WHERE id_encomenda = ?";
         $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("i", $encomenda);
-
-        if ($stmt->execute()) {
+        if ($stmt->execute([$encomenda])) {
             echo "Encomenda excluída com sucesso.";
         } else {
-            echo "Erro ao excluir a encomenda: " . $stmt->error;
+            $erro = $stmt->errorInfo();
+            echo "Erro ao excluir a encomenda: " . $erro[2];
         }
-        
+        $stmt = null;
+        exit;
     }
-    exit;
 }
 ?>

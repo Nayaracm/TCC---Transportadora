@@ -106,43 +106,29 @@ require_once '../scripts/connection.php';
                                 class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold"></label>
                             <input type="hidden" id="id_encomenda_input" name="id_encomenda">
                             <div class="flex items-center space-x-4">
-                                <label for="encomenda-nome"
-                                    class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Nome</label>
-                                <input type="text" id="encomenda-nome" name="nome" value="Encomenda 2"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <label for="cliente-nome"
-                                    class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Cliente</label>
-                                <input type="text" id="cliente-nome" name="cliente" value="Fulano 1"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                            </div>
-                            <div class="grid grid-cols-2 grid-rows-2 gap-2 space-x-4">
-                                <label for="endereco"
-                                    class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Enredeço</label>
-                                <input type="text" id="cliente-street-name" name="street-name" placeholder="Nome da Rua"
-                                    value=""
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="number" id="cliente-street-number" name="street-number"
-                                    placeholder="Numero da Residencia" value=""
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="street-complement" name="street-compelment"
-                                    placeholder="Complemento" value=""
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="cliente-neighborhood" name="street-compelment"
-                                    placeholder="Bairro" value=""
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="city" name="city" placeholder="Cidade" value=""
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="cep" name="cep" placeholder="Cep" value=""
+                                <label for="nm_encomenda" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Nome da Encomenda</label>
+                                <input type="text" id="nm_encomenda" name="nm_encomenda"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <div class="flex flex-col  w-full space-x-4 gap-3">
-                                <label for="descricao"
-                                    class="bg-[#202737] w-25 text-white px-4 py-2 rounded-full font-semibold">Descrição</label>
-                                <textarea id="description-encomenda" name="description"
-                                    placeholder="Descrição da Encomenda"
+                                <label for="ds_encomenda" class="bg-[#202737] w-25 text-white px-4 py-2 rounded-full font-semibold">Descrição</label>
+                                <textarea id="ds_encomenda" name="ds_encomenda" placeholder="Descrição da Encomenda"
                                     class=" bg-[#bf6e33] text-white w-full h-50 rounded-2xl pl-2 "></textarea>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="qt_peso_encomenda" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Peso (kg)</label>
+                                <input type="number" id="qt_peso_encomenda" name="qt_peso_encomenda"
+                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="nm_status_encomenda" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Status</label>
+                                <input type="text" id="nm_status_encomenda" name="nm_status_encomenda"
+                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="id_cliente" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">ID Cliente</label>
+                                <input type="number" id="id_cliente" name="id_cliente"
+                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <button type="submit" id="salvar"
                                 class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded self-end">
@@ -169,39 +155,29 @@ require_once '../scripts/connection.php';
                         </div>
                         <div class="w-3/4 flex flex-col space-y-4">
                             <div class="flex items-center space-x-4">
-                                <label for="encomenda-nome-add"
-                                    class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Nome</label>
-                                <input type="text" id="encomenda-nome-add" name="nome" placeholder="Nome da Encomenda"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <label for="cliente-nome-add"
-                                    class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Cliente</label>
-                                <input type="text" id="cliente-nome-add" name="cliente" placeholder="Nome do Cliente"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                            </div>
-                            <div class="grid grid-cols-2 grid-rows-2 gap-2 space-x-4">
-                                <label for="endereco-add"
-                                    class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Cliente</label>
-                                <input type="text" id="street-name-add" name="street-new" placeholder="Nome da Rua"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="street-number-add" name="street-number-new"
-                                    placeholder="Numero da Rua"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="complement-add" name="complement-new" placeholder="Complemento"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="neighborhood-add" name="neighborhood-new" placeholder="Bairro"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="city-add" name="city-new" placeholder="Cidade"
-                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
-                                <input type="text" id="cep-add" name="cep-new" placeholder="CEP"
+                                <label for="nm_encomenda_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Nome da Encomenda</label>
+                                <input type="text" id="nm_encomenda_add" name="nm_encomenda" placeholder="Nome da Encomenda"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <div class="flex flex-col  w-full space-x-4 gap-3">
-                                <label for="cliente-nome"
-                                    class="bg-[#202737] w-25 text-white px-4 py-2 rounded-full font-semibold">Descrição</label>
-                                <textarea name="" id=""
+                                <label for="ds_encomenda_add" class="bg-[#202737] w-25 text-white px-4 py-2 rounded-full font-semibold">Descrição</label>
+                                <textarea id="ds_encomenda_add" name="ds_encomenda" placeholder="Descrição da Encomenda"
                                     class=" bg-[#bf6e33] text-white w-full h-50 rounded-2xl pl-2 "></textarea>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="qt_peso_encomenda_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Peso (kg)</label>
+                                <input type="number" id="qt_peso_encomenda_add" name="qt_peso_encomenda" placeholder="Peso"
+                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="nm_status_encomenda_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Status</label>
+                                <input type="text" id="nm_status_encomenda_add" name="nm_status_encomenda" placeholder="Status"
+                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="id_cliente_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">ID Cliente</label>
+                                <input type="number" id="id_cliente_add" name="id_cliente" placeholder="ID do Cliente"
+                                    class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <button type="submit"
                                 class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded self-end">
@@ -233,19 +209,13 @@ require_once '../scripts/connection.php';
     openEditModalBtn.forEach(btn => {
         btn.addEventListener('click', function () {
             toggleEditModal();
-            document.getElementById('encomenda-nome').value = btn.getAttribute('data-encomenda');
-            document.getElementById('cliente-nome').value = btn.getAttribute('data-cliente');
-            document.getElementById('cliente-street-name').value = btn.getAttribute('data-rua');
-            document.getElementById('cliente-street-number').value = btn.getAttribute('data-casa');
-            document.getElementById('street-complement').value = btn.getAttribute('data-complemento');
-            document.getElementById('cliente-neighborhood').value = btn.getAttribute('data-bairro');
-            document.getElementById('description-encomenda').value = btn.getAttribute('data-descricao');
-            document.getElementById('city').value = btn.getAttribute('data-cidade');
-            document.getElementById('id_encomenda').textContent = 'Codigo de Encomenda: ' + btn.getAttribute('data-id');
+            document.getElementById('id_encomenda').textContent = 'Código de Encomenda: ' + btn.getAttribute('data-id');
             document.getElementById('id_encomenda_input').value = btn.getAttribute('data-id');
-            document.getElementById('cep').value = btn.getAttribute('data-cep');
-            // Adicione outros campos conforme necessário
-
+            document.getElementById('nm_encomenda').value = btn.getAttribute('data-encomenda');
+            document.getElementById('ds_encomenda').value = btn.getAttribute('data-descricao');
+            document.getElementById('qt_peso_encomenda').value = btn.getAttribute('data-peso');
+            document.getElementById('nm_status_encomenda').value = btn.getAttribute('data-status');
+            document.getElementById('id_cliente').value = btn.getAttribute('data-cliente-id') || '';
         });
     });
 
@@ -258,7 +228,46 @@ require_once '../scripts/connection.php';
 
     function toggleAddModal() {
         addModal.classList.toggle('hidden');
+        // Limpa os campos do modal de adição
+        document.getElementById('nm_encomenda_add').value = '';
+        document.getElementById('ds_encomenda_add').value = '';
+        document.getElementById('qt_peso_encomenda_add').value = '';
+        document.getElementById('nm_status_encomenda_add').value = '';
+        document.getElementById('id_cliente_add').value = '';
     }
+    // ======================= ENVIO DO FORMULÁRIO DE ADIÇÃO =======================
+    document.getElementById('add-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const nm_encomenda = document.getElementById('nm_encomenda_add').value;
+        const ds_encomenda = document.getElementById('ds_encomenda_add').value;
+        const qt_peso_encomenda = document.getElementById('qt_peso_encomenda_add').value;
+        const nm_status_encomenda = document.getElementById('nm_status_encomenda_add').value;
+        const id_cliente = document.getElementById('id_cliente_add').value;
+
+        if (!confirm("Tem certeza que deseja adicionar esta encomenda?")) {
+            return;
+        }
+
+        fetch('../scripts/edit_modal.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'acao=adicionar' +
+                '&nm_encomenda=' + encodeURIComponent(nm_encomenda) +
+                '&ds_encomenda=' + encodeURIComponent(ds_encomenda) +
+                '&qt_peso_encomenda=' + encodeURIComponent(qt_peso_encomenda) +
+                '&nm_status_encomenda=' + encodeURIComponent(nm_status_encomenda) +
+                '&id_cliente=' + encodeURIComponent(id_cliente)
+        })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error("Erro:", error);
+                alert("Erro ao adicionar encomenda.");
+            });
+    });
 
     openAddModalBtn.addEventListener('click', toggleAddModal);
     closeAddModalBtn.addEventListener('click', toggleAddModal);
@@ -278,16 +287,11 @@ require_once '../scripts/connection.php';
         event.preventDefault(); // impede envio do formulário
 
         const id_encomenda = document.getElementById('id_encomenda_input').value;
-        const nome = document.getElementById('encomenda-nome').value;
-        const cliente = document.getElementById('cliente-nome').value;
-        const rua = document.getElementById('cliente-street-name').value;
-        const cidade = document.getElementById('city').value;
-        const bairro = document.getElementById('cliente-neighborhood').value;
-        const descricao = document.getElementById('description-encomenda').value;
-        const cep = document.getElementById('cep').value;
-        const casa = document.getElementById('cliente-street-number').value;
-        const complemento = document.getElementById('street-complement').value;
-        const status = document.getElementById('status').value;
+        const nm_encomenda = document.getElementById('nm_encomenda').value;
+        const ds_encomenda = document.getElementById('ds_encomenda').value;
+        const qt_peso_encomenda = document.getElementById('qt_peso_encomenda').value;
+        const nm_status_encomenda = document.getElementById('nm_status_encomenda').value;
+        const id_cliente = document.getElementById('id_cliente').value;
 
         if (!confirm("Tem certeza que deseja salvar essas alterações?")) {
             return;
@@ -297,16 +301,11 @@ require_once '../scripts/connection.php';
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'acao=salvar&id_encomenda=' + encodeURIComponent(id_encomenda) +
-                '&nome=' + encodeURIComponent(nome) +
-                '&cliente=' + encodeURIComponent(cliente) +
-                '&rua=' + encodeURIComponent(rua) +
-                '&cidade=' + encodeURIComponent(cidade) +
-                '&bairro=' + encodeURIComponent(bairro) +
-                '&descricao=' + encodeURIComponent(descricao) +
-                '&cep=' + encodeURIComponent(cep) +
-                '&casa=' + encodeURIComponent(casa) +
-                '&complemento=' + encodeURIComponent(complemento) +
-                '&status=' + encodeURIComponent(status)
+                '&nm_encomenda=' + encodeURIComponent(nm_encomenda) +
+                '&ds_encomenda=' + encodeURIComponent(ds_encomenda) +
+                '&qt_peso_encomenda=' + encodeURIComponent(qt_peso_encomenda) +
+                '&nm_status_encomenda=' + encodeURIComponent(nm_status_encomenda) +
+                '&id_cliente=' + encodeURIComponent(id_cliente)
         })
             .then(response => response.text())
             .then(data => {
