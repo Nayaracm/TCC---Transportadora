@@ -34,13 +34,13 @@ require_once '../scripts/connection.php';
             <footer class="w-full h-32"></footer>
 
         </div>
-        <main class="h-[97%] w-[80%] flex justify-center items-center bg-amber-300 rounded-2xl relative">
+        <main class="h-[97%] w-[80%] flex justify-center items-center rounded-2xl relative">
 
             <div id="encomenda"
-                class="tab-content w-full h-full flex flex-col align-center items-center bg-[#003042] rounded-2xl">
+                class="tab-content w-full h-full flex flex-col align-center items-center bg-[#003042] rounded-xl">
 
                 <header class="w-full h-[10%] flex flex-row justify-center gap-[70%] items-center">
-                    <h1 class="text-2xl text-center w-[160px] h-[40px] bg-[#bf6e33]  rounded-2xl text-white">Encomendas
+                    <h1 class="text-[1.5rem] text-center w-[10%] h-{10%} bg-[#bf6e33]  rounded-2xl text-white">Encomendas
                     </h1>
                     <input placeholder="Pesquisa" type="text"
                         class="w-[208px] h-[32px] text-lg bg-white border rounded-2xl pl-2 text-black border-black">
@@ -83,7 +83,7 @@ require_once '../scripts/connection.php';
                     ?>
                 </div>
 
-                <footer class="w-full flex flex-1 justify-end pr-30 bg-[#003042]">
+                <footer class="w-full flex flex-1 justify-end pr-30 bg-[#003042] rounded-xl">
                     <button id="open-add-modal-button"
                         class="bg-white hover:bg-[#bf6e33] hover:text-white text-black h-10 w-50 text-center rounded">
                         Nova encomenda
@@ -95,7 +95,7 @@ require_once '../scripts/connection.php';
                 <form id="edit-form"
                     class="modal-content relative bg-white p-6 border border-gray-400 w-full max-w-4xl rounded-xl shadow-2xl">
                     <span
-                        class="close-button-edit absolute top-4 right-4 text-gray-400 hover:text-black text-3xl font-bold cursor-pointer">&times;</span>
+                        class="close-button-edit absolute top-1 right-1 text-gray-400 hover:text-black text-3xl font-bold cursor-pointer">&times;</span>
                     <div class="flex items-center space-x-6">
                         <div class="w-1/4 h-64 bg-[#202737] rounded-lg flex items-center justify-center p-4">
                             <img src="https://via.placeholder.com/150/bf6e33/FFFFFF?text=Caixas"
@@ -130,14 +130,16 @@ require_once '../scripts/connection.php';
                                 <input type="number" id="id_cliente" name="id_cliente"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
+                            <div class="flex justify-end space-x-4">
                             <button type="submit" id="salvar"
-                                class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded self-end">
+                                class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded">
                                 Salvar Alterações
                             </button>
                             <button type="submit" id="excluir"
-                                class="bg-[#003042] hover:bg-[#bf6e33] fixed bottom-[206.88px] right-224 text-white font-bold py-2 px-4 rounded self-end">
+                                class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded">
                                 Excluir Encomenda
                             </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -147,7 +149,7 @@ require_once '../scripts/connection.php';
                 <form id="add-form"
                     class="modal-content relative bg-white p-6 border border-gray-400 w-full max-w-4xl rounded-xl shadow-2xl">
                     <span
-                        class="close-button-add absolute top-4 right-4 text-gray-400 hover:text-black text-3xl font-bold cursor-pointer">&times;</span>
+                        class="close-button-add absolute top-1 right-1 text-gray-400 hover:text-black text-3xl font-bold cursor-pointer">&times;</span>
                     <div class="flex items-center space-x-6">
                         <div class="w-1/4 h-64 bg-[#202737] rounded-lg flex items-center justify-center p-4">
                             <input type="file" id="encomenda-image" name="encomenda-image"
