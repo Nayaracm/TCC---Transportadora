@@ -38,35 +38,39 @@ require_once '../scripts/connection.php';
 
             <div id="encomenda"
                 class="tab-content w-full h-full flex flex-col align-center items-center bg-[#003042] rounded-xl">
-
                 <header class="w-full h-[10%] flex flex-row justify-center gap-[70%] items-center">
                     <h1 class="text-[1.5rem] text-center w-[10%] h-{10%} bg-[#bf6e33]  rounded-2xl text-white">Encomendas
-                    </h1>
-                    <input placeholder="Pesquisa" type="text"
-                        class="w-[208px] h-[32px] text-lg bg-white border rounded-2xl pl-2 text-black border-black">
+                        </h1>
+                        <form action="dashboard.php" method="POST">
+                        <input placeholder="Pesquisa" name="pesquisa" type="text"
+                            class="w-[208px] h-[32px] text-lg bg-white border rounded-2xl pl-2 text-black border-black">
+                        </form>
+                    </header>
                 </header>
 
                 <div class="w-full h-[83%] flex items-center pt-5.5 gap-4.5 flex-col overflow-auto">
                     <?php
-                    $stmt = $conexao->prepare("SELECT * FROM vw_cliente_encomenda");
+                    $pesquisa = $_POST['pesquisa'] ?? '';
+                    if($pesquisa) {
+                        $stmt = $conexao->prepare("SELECT * FROM tb_encomenda WHERE cd_cliente LIKE ?");
+                        $stmt->execute([$pesquisa . '%']);
+                    } else {
+                    $stmt = $conexao->prepare("SELECT * FROM tb_encomenda");
                     $stmt->execute();
-
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        ?>
-
-                        <div class="open-edit-modal-button w-[60%] h-40 flex flex-row hover:cursor-pointer bg-white rounded-2xl"
-                            data-encomenda="<?php echo $row['nm_encomenda']; ?>"
-                            data-id="<?php echo $row['id_encomenda']; ?>" data-cliente="<?php echo $row['nm_cliente']; ?>"
-                            data-rua="<?php echo $row['ds_rua']; ?>" data-cidade="<?php echo $row['nm_cidade']; ?>"
-                            data-bairro="<?php echo $row['nm_bairro']; ?>"
-                            data-descricao="<?php echo $row['ds_encomenda']; ?>" data-cep="<?php echo $row['nr_cep']; ?>"
-                            data-casa="<?php echo $row['nr_casa']; ?>"
-                            data-complemento="<?php echo $row['ds_complemento']; ?>"
+                    }
+                    if($stmt->rowCount()) {
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            ?>
+                            <div class="open-edit-modal-button w-[60%] h-40 flex flex-row hover:cursor-pointer bg-white rounded-2xl"
+                                data-encomenda="<?php echo $row['nm_encomenda']; ?>"
+                                data-id="<?php echo $row['id_encomenda']; ?>" data-cliente-id="<?php echo $row['cd_cliente']; ?>"
                             data-descricao="<?php echo $row['ds_encomenda']; ?>"
                             data-peso="<?php echo $row['qt_peso_encomenda']; ?>"
-                            data-status="<?php echo $row['nm_status_encomenda']; ?>">
+                            data-status="<?php echo $row['nm_status_encomenda']; ?>"
+                            data-imagem="data:image/jpeg;base64,<?= base64_encode($row['imagem']) ?>">>
+                            
                             <div class="w-[30%] h-full flex justify-center items-center">
-                                <img src="../imgs/test-img.jpg" class="size-3/4 rounded-2xl" alt="">
+                                <img src="data:image/jpeg;base64,<?= base64_encode($row['imagem']) ?>" class="size-3/4 rounded-2xl" alt="">
                             </div>
                             <div class="w-[50%] h-full flex flex-col items-center justify-center">
                                 <h1 class="text-2xl text-center"><?php echo $row['nm_encomenda']; ?></h1>
@@ -79,6 +83,10 @@ require_once '../scripts/connection.php';
                             </div>
                         </div>
                         <?php
+                        }
+                    }
+                    else {
+                        echo "<p class='text-white'>Nenhuma encomenda encontrada.</p>";
                     }
                     ?>
                 </div>
@@ -98,7 +106,7 @@ require_once '../scripts/connection.php';
                         class="close-button-edit absolute top-1 right-1 text-gray-400 hover:text-black text-3xl font-bold cursor-pointer">&times;</span>
                     <div class="flex items-center space-x-6">
                         <div class="w-1/4 h-64 bg-[#202737] rounded-lg flex items-center justify-center p-4">
-                            <img src="https://via.placeholder.com/150/bf6e33/FFFFFF?text=Caixas"
+                            <img id="edit-imagem" src="https://via.placeholder.com/150/bf6e33/FFFFFF?text=Caixas"
                                 alt="Ícone de Encomenda" class="w-full h-auto">
                         </div>
                         <div class="w-3/4 flex flex-col space-y-4">
@@ -126,7 +134,7 @@ require_once '../scripts/connection.php';
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <div class="flex items-center space-x-4">
-                                <label for="id_cliente" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">ID Cliente</label>
+                                <label for="id_cliente" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Id do Cliente (cpf ou cnpj)</label>
                                 <input type="number" id="id_cliente" name="id_cliente"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
@@ -177,7 +185,7 @@ require_once '../scripts/connection.php';
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <div class="flex items-center space-x-4">
-                                <label for="id_cliente_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">ID Cliente</label>
+                                <label for="id_cliente_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">ID Cliente (cpf ou cnpj)</label>
                                 <input type="number" id="id_cliente_add" name="id_cliente" placeholder="ID do Cliente"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
@@ -217,7 +225,8 @@ require_once '../scripts/connection.php';
             document.getElementById('ds_encomenda').value = btn.getAttribute('data-descricao');
             document.getElementById('qt_peso_encomenda').value = btn.getAttribute('data-peso');
             document.getElementById('nm_status_encomenda').value = btn.getAttribute('data-status');
-            document.getElementById('id_cliente').value = btn.getAttribute('data-cliente-id') || '';
+            document.getElementById('id_cliente').value = btn.getAttribute('data-cliente-id');
+            document.getElementById('edit-imagem').src = btn.getAttribute('data-imagem');
         });
     });
 
@@ -240,11 +249,9 @@ require_once '../scripts/connection.php';
     // ======================= ENVIO DO FORMULÁRIO DE ADIÇÃO =======================
     document.getElementById('add-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        const nm_encomenda = document.getElementById('nm_encomenda_add').value;
-        const ds_encomenda = document.getElementById('ds_encomenda_add').value;
-        const qt_peso_encomenda = document.getElementById('qt_peso_encomenda_add').value;
-        const nm_status_encomenda = document.getElementById('nm_status_encomenda_add').value;
-        const id_cliente = document.getElementById('id_cliente_add').value;
+        const form = document.getElementById('add-form');
+        const formData = new FormData(form);
+        formData.append('acao', 'adicionar');
 
         if (!confirm("Tem certeza que deseja adicionar esta encomenda?")) {
             return;
@@ -252,13 +259,7 @@ require_once '../scripts/connection.php';
 
         fetch('../scripts/edit_modal.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'acao=adicionar' +
-                '&nm_encomenda=' + encodeURIComponent(nm_encomenda) +
-                '&ds_encomenda=' + encodeURIComponent(ds_encomenda) +
-                '&qt_peso_encomenda=' + encodeURIComponent(qt_peso_encomenda) +
-                '&nm_status_encomenda=' + encodeURIComponent(nm_status_encomenda) +
-                '&id_cliente=' + encodeURIComponent(id_cliente)
+            body: formData
         })
             .then(response => response.text())
             .then(data => {

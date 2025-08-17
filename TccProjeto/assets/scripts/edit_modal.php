@@ -9,11 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $qt_peso_encomenda = $_POST['qt_peso_encomenda'] ?? '';
         $nm_status_encomenda = $_POST['nm_status_encomenda'] ?? '';
         $id_cliente = $_POST['id_cliente'] ?? '';
+        $imagem = file_get_contents($_FILES['encomenda-image']['tmp_name']) ?? '';
 
         if ($nm_encomenda && $qt_peso_encomenda && $nm_status_encomenda && $id_cliente) {
-            $sql = "INSERT INTO tb_encomenda (nm_encomenda, ds_encomenda, qt_peso_encomenda, nm_status_encomenda, id_cliente) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO tb_encomenda (nm_encomenda, ds_encomenda, qt_peso_encomenda, nm_status_encomenda, cd_cliente, imagem) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conexao->prepare($sql);
-            if ($stmt->execute([$nm_encomenda, $ds_encomenda, $qt_peso_encomenda, $nm_status_encomenda, $id_cliente])) {
+            if ($stmt->execute([$nm_encomenda, $ds_encomenda, $qt_peso_encomenda, $nm_status_encomenda, $id_cliente, $imagem])) {
                 echo "Encomenda cadastrada com sucesso!";
             } else {
                 $erro = $stmt->errorInfo();
@@ -36,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_cliente = $_POST['id_cliente'] ?? '';
 
         if ($id_encomenda && $nm_encomenda && $qt_peso_encomenda && $nm_status_encomenda && $id_cliente) {
-            $sql = "UPDATE tb_encomenda SET nm_encomenda = ?, ds_encomenda = ?, qt_peso_encomenda = ?, nm_status_encomenda = ?, id_cliente = ? WHERE id_encomenda = ?";
+            $sql = "UPDATE tb_encomenda SET nm_encomenda = ?, ds_encomenda = ?, qt_peso_encomenda = ?, nm_status_encomenda = ?, cd_cliente = ? WHERE id_encomenda = ?";
             $stmt = $conexao->prepare($sql);
             if ($stmt->execute([$nm_encomenda, $ds_encomenda, $qt_peso_encomenda, $nm_status_encomenda, $id_cliente, $id_encomenda])) {
                 echo "Encomenda alterada com sucesso!";

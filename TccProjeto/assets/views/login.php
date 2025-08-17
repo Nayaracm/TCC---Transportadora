@@ -12,6 +12,8 @@ if (isset($_POST['cnpj']) && isset($_POST['senha'])) {
 
         if ($resultado) {
             $_SESSION['usuario'] = $resultado;
+            $cnpj = '';
+            $senha_usuario = '';
             header("Location: dashboard.php");
             exit();
         } else {
@@ -41,18 +43,27 @@ if (isset($_POST['cnpj']) && isset($_POST['senha'])) {
             </div>
         </div>
         <form class="flex flex-col items-center justify-center gap-2 " action="" method="POST">
-            <input placeholder="CNPJ" name="cnpj"
+            <input placeholder="CNPJ" id="cnpj" name="cnpj"
                 class="border w-70 h-8.5 bg-[#353535] placeholder-white text-white border-black appearance-none rounded-lg pl-2"
                 type="text" maxlength="18" oninput="this.value = formatCNPJ(this.value)" />
-            <input placeholder="Senha" name="senha"
+            <input placeholder="Senha" id="senha" name="senha"
                 class="border w-70 h-8.5 bg-[#353535] placeholder-white text-white border-black rounded-lg pl-2"
                 type="password">
-            <button class=" rounded-md w-45 h-10 bg-white mt-10 hover:bg-gray-200 cursor-pointer"
+            <button id="login-button" class=" rounded-md w-45 h-10 bg-white mt-10 hover:bg-gray-200 cursor-pointer"
                 type="submit">Entrar</button>
         </form>
     </div>
 </body>
 <script>
+    const cnpjInput = document.getElementById('cnpj');
+    const senhaInput = document.getElementById('senha');
+    const loginButton = document.getElementById('login-button');
+    loginButton.addEventListener('click', function(event) {
+        setTimeout(() => {
+            cnpjInput.value = null;
+            senhaInput.value = null;
+        }, 1000);
+    });
     function formatCNPJ(value) {
         value = value.replace(/\D/g, '').slice(0, 14);
         return value

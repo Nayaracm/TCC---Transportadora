@@ -65,17 +65,17 @@ create table tb_motorista(
     ds_encomenda varchar(500),
     qt_peso_encomenda int not null,
     nm_status_encomenda varchar(20) not null,
-    id_cliente int,
-		primary key (id_encomenda),
-        foreign key (id_cliente) references tb_cliente(id_cliente) ON DELETE CASCADE);
+    cd_cliente varchar(14) not null,
+    imagem LONGBLOB,
+		primary key (id_encomenda));
 
 select * from tb_encomenda;
 
-CREATE VIEW vw_cliente_encomenda AS
+/*CREATE VIEW vw_cliente_encomenda AS
 SELECT 
 	en.id_encomenda,
     en.nm_encomenda,
-    cl.nm_cliente,
+    en.cd_cliente,
     ed.ds_rua,
     ci.nm_cidade,
     ba.nm_bairro,
@@ -90,39 +90,7 @@ INNER JOIN tb_cliente AS cl ON en.id_cliente = cl.id_cliente
 INNER JOIN tb_endereco AS ed ON cl.id_endereco = ed.id_endereco
 INNER JOIN tb_cidade AS ci ON ed.id_cidade = ci.id_cidade
 INNER JOIN tb_bairro AS ba ON ed.id_bairro = ba.id_bairro
-INNER JOIN tb_cep AS ce ON ed.id_cep = ce.cd_cep;
- drop view vw_cliente_encomenda;
+INNER JOIN tb_cep AS ce ON ed.id_cep = ce.cd_cep;*/
 select * from vw_cliente_encomenda;
-
-INSERT INTO tb_cep (nr_cep) VALUES ('11300000'), ('11310000');
-INSERT INTO tb_cidade (nm_cidade) VALUES ('São Vicente'), ('Santos');
-INSERT INTO tb_bairro (nm_bairro) VALUES ('Centro'), ('Boa Vista');
-
-INSERT INTO tb_endereco (ds_rua, nr_casa, ds_complemento, id_bairro, id_cidade, id_cep)
-VALUES 
-('Rua das Flores', 123, 'Apto 2', 1, 1, 1),
-('Av. Brasil', 456, NULL, 2, 2, 2);
-
-INSERT INTO tb_contato (nr_celular, nr_telefone)
-VALUES 
-('11999999999', '123456789'),
-('11988888888', '987654321');
-
-INSERT INTO tb_cliente (cd_cpf, cd_cnpj, nm_cliente, id_contato, id_endereco)
-VALUES 
-('12345678901', NULL, 'João Silva', 1, 1),
-(NULL, '98765432100012', 'Empresa XYZ', 2, 2);
-
-INSERT INTO tb_encomenda (nm_encomenda, ds_encomenda, qt_peso_encomenda, nm_status_encomenda, id_cliente)
-VALUES 
-('Pratos', 'Uma coletânea de pratos.', 5, 'Pendente', 1),
-('Mesas', 'Uma coletânea de mesas.', 10, 'Em transporte', 2),
-('Pratos', 'Uma coletânea de pratos.', 5, 'Pendente', 1),
-('Mesas', 'Uma coletânea de mesas.', 10, 'Em transporte', 2),
-('Pratos', 'Uma coletânea de pratos.', 5, 'Pendente', 1),
-('Mesas', 'Uma coletânea de mesas.', 10, 'Em transporte', 2),
-('Pratos', 'Uma coletânea de pratos.', 5, 'Pendente', 1),
-('Mesas', 'Uma coletânea de mesas.', 10, 'Em transporte', 2),
-('Cadeiras', 'Conjunto de cadeiras de madeira.', 8, 'Entregue', 1);
 
 insert into tb_login(id_login, cd_senha) VALUES ("23.233.232/3333-33", "senha");
