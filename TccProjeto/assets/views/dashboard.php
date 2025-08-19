@@ -1,6 +1,5 @@
 <?php
 require_once '../scripts/connection.php';
-
 ?>
 
 <!DOCTYPE html>
@@ -55,34 +54,34 @@ require_once '../scripts/connection.php';
                         $stmt = $conexao->prepare("SELECT * FROM tb_encomenda WHERE cd_cliente LIKE ?");
                         $stmt->execute([$pesquisa . '%']);
                     } else {
-                    $stmt = $conexao->prepare("SELECT * FROM tb_encomenda");
-                    $stmt->execute();
+                        $stmt = $conexao->prepare("SELECT * FROM tb_encomenda");
+                        $stmt->execute();
                     }
                     if($stmt->rowCount()) {
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             ?>
                             <div class="open-edit-modal-button w-[60%] h-40 flex flex-row hover:cursor-pointer bg-white rounded-2xl"
-                                data-encomenda="<?php echo $row['nm_encomenda']; ?>"
-                                data-id="<?php echo $row['id_encomenda']; ?>" data-cliente-id="<?php echo $row['cd_cliente']; ?>"
-                            data-descricao="<?php echo $row['ds_encomenda']; ?>"
-                            data-peso="<?php echo $row['qt_peso_encomenda']; ?>"
-                            data-status="<?php echo $row['nm_status_encomenda']; ?>"
-                            data-imagem="data:image/jpeg;base64,<?= base64_encode($row['imagem']) ?>">>
-                            
-                            <div class="w-[30%] h-full flex justify-center items-center">
-                                <img src="data:image/jpeg;base64,<?= base64_encode($row['imagem']) ?>" class="size-3/4 rounded-2xl" alt="">
+                                data-encomenda="<?php echo htmlspecialchars($row['nm_encomenda']); ?>"
+                                data-id="<?php echo htmlspecialchars($row['id_encomenda']); ?>"
+                                data-cliente-id="<?php echo htmlspecialchars($row['cd_cliente']); ?>"
+                                data-descricao="<?php echo htmlspecialchars($row['ds_encomenda']); ?>"
+                                data-peso="<?php echo htmlspecialchars($row['qt_peso_encomenda']); ?>"
+                                data-status="<?php echo htmlspecialchars($row['nm_status_encomenda']); ?>"
+                                data-imagem="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>">
+                                <div class="w-[30%] h-full flex justify-center items-center">
+                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" class="size-3/4 rounded-2xl" alt="">
+                                </div>
+                                <div class="w-[50%] h-full flex flex-col items-center justify-center">
+                                    <h1 class="text-2xl text-center"><?php echo htmlspecialchars($row['nm_encomenda']); ?></h1>
+                                    <p class="text-lg text-center"><?php echo htmlspecialchars($row['ds_encomenda']); ?></p>
+                                    <p class="text-lg text-center">Peso: <?php echo htmlspecialchars($row['qt_peso_encomenda']); ?>Kg</p>
+                                </div>
+                                <div class="w-[20%] h-full flex flex-col items-center pt-5">
+                                    <label for="status"
+                                        class="border text-center text-xl rounded-2xl w-28 bg-[#bf6e33] text-white h-8"><?php echo htmlspecialchars($row['nm_status_encomenda']); ?></label>
+                                </div>
                             </div>
-                            <div class="w-[50%] h-full flex flex-col items-center justify-center">
-                                <h1 class="text-2xl text-center"><?php echo $row['nm_encomenda']; ?></h1>
-                                <p class="text-lg text-center"><?php echo $row['ds_encomenda']; ?></p>
-                                <p class="text-lg text-center">Peso: <?php echo $row['qt_peso_encomenda']; ?>Kg</p>
-                            </div>
-                            <div class="w-[20%] h-full flex flex-col items-center pt-5">
-                                <label for="status"
-                                    class="border text-center text-xl rounded-2xl w-28 bg-[#bf6e33] text-white h-8"><?php echo $row['nm_status_encomenda']; ?></label>
-                            </div>
-                        </div>
-                        <?php
+                            <?php
                         }
                     }
                     else {
@@ -135,18 +134,18 @@ require_once '../scripts/connection.php';
                             </div>
                             <div class="flex items-center space-x-4">
                                 <label for="id_cliente" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">Id do Cliente (cpf ou cnpj)</label>
-                                <input type="number" id="id_cliente" name="id_cliente"
+                                <input type="text" id="id_cliente" name="id_cliente"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <div class="flex justify-end space-x-4">
-                            <button type="submit" id="salvar"
-                                class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded">
-                                Salvar Alterações
-                            </button>
-                            <button type="submit" id="excluir"
-                                class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded">
-                                Excluir Encomenda
-                            </button>
+                                <button type="button" id="salvar"
+                                    class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded">
+                                    Salvar Alterações
+                                </button>
+                                <button type="button" id="excluir"
+                                    class="bg-[#003042] hover:bg-[#bf6e33] text-white font-bold py-2 px-4 rounded">
+                                    Excluir Encomenda
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -154,7 +153,7 @@ require_once '../scripts/connection.php';
             </div>
             <div id="add-modal"
                 class="hidden absolute inset-0 z-50 overflow-auto bg-black/50 flex items-center justify-center">
-                <form id="add-form"
+                <form id="add-form" enctype="multipart/form-data"
                     class="modal-content relative bg-white p-6 border border-gray-400 w-full max-w-4xl rounded-xl shadow-2xl">
                     <span
                         class="close-button-add absolute top-1 right-1 text-gray-400 hover:text-black text-3xl font-bold cursor-pointer">&times;</span>
@@ -186,7 +185,7 @@ require_once '../scripts/connection.php';
                             </div>
                             <div class="flex items-center space-x-4">
                                 <label for="id_cliente_add" class="bg-[#202737] text-white px-4 py-2 rounded-full font-semibold">ID Cliente (cpf ou cnpj)</label>
-                                <input type="number" id="id_cliente_add" name="id_cliente" placeholder="ID do Cliente"
+                                <input type="text" id="id_cliente_add" name="id_cliente" placeholder="ID do Cliente"
                                     class="bg-[#bf6e33] text-white px-4 py-2 rounded-full font-semibold flex-grow focus:outline-none focus:ring-2 focus:ring-orange-400">
                             </div>
                             <button type="submit"
